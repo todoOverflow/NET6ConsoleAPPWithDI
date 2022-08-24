@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -17,6 +18,10 @@ namespace NET6ConsoleAPPWithDI
                 var logger = provider.GetRequiredService<ILogger<Program>>();
                 logger.LogInformation("App starts......");
 
+                //set appsettings.json COPY ALWAYS
+                var config = provider.GetRequiredService<IConfiguration>();
+                var appName = config.GetValue<string>("AppInfo:Name");
+                logger.LogInformation($"App name is {appName}");
 
                 Console.ReadKey();
             }

@@ -1,10 +1,8 @@
 ﻿
 namespace NET6ConsoleAPPWithDI
 {
-    public interface IMyService
+    public interface IMyRepository
     {
-        void Welcome();
-
         Task<int> GetSomethingFromDb();
     }
 }

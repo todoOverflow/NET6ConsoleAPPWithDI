@@ -7,7 +7,7 @@ namespace NET6ConsoleAPPWithDI
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             try
             {
@@ -25,6 +25,9 @@ namespace NET6ConsoleAPPWithDI
 
                 var myService = provider.GetRequiredService<IMyService>();
                 myService.Welcome();
+
+                var count = await myService.GetSomethingFromDb();
+                logger.LogInformation($"Count is {count}");
 
                 Console.ReadKey();
             }
@@ -47,6 +50,7 @@ namespace NET6ConsoleAPPWithDI
         private static void ConfigureDelegate(HostBuilderContext hostContext, IServiceCollection services)
         {
             services
+                .AddSingleton<IMyRepository, MyRepository>()
                 .AddSingleton<IMyService,MyService>()
                 .AddLogging(loggingBuilder => loggingBuilder.AddConsole());
         }

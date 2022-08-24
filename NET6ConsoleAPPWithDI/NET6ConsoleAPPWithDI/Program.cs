@@ -23,6 +23,9 @@ namespace NET6ConsoleAPPWithDI
                 var appName = config.GetValue<string>("AppInfo:Name");
                 logger.LogInformation($"App name is {appName}");
 
+                var myService = provider.GetRequiredService<IMyService>();
+                myService.Welcome();
+
                 Console.ReadKey();
             }
             catch (Exception e)
@@ -34,13 +37,18 @@ namespace NET6ConsoleAPPWithDI
 
         private static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var hostBuilder = Host.CreateDefaultBuilder(args)
-            .ConfigureServices((context, services) =>
-            {
-                services.AddLogging(loggingBuilder => loggingBuilder.AddConsole());
-            });
+            var hostBuilder = Host
+                .CreateDefaultBuilder(args)
+                .ConfigureServices(ConfigureDelegate);
 
             return hostBuilder;
+        }
+
+        private static void ConfigureDelegate(HostBuilderContext hostContext, IServiceCollection services)
+        {
+            services
+                .AddSingleton<IMyService,MyService>()
+                .AddLogging(loggingBuilder => loggingBuilder.AddConsole());
         }
 
     }
